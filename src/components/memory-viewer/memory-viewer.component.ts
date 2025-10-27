@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, afterNextRender, signal, WritableSignal, inject, output } from '@angular/core';
+import { Component, ChangeDetectionStrategy, afterNextRender, signal, WritableSignal, inject, output, ElementRef } from '@angular/core';
 import { ProseService } from '../../services/prose.service';
 import { ProseFragment } from '../../models/prose.model';
 
@@ -34,6 +34,7 @@ interface DisplayFragment {
 })
 export class MemoryViewerComponent {
   private proseService = inject(ProseService);
+  private elementRef = inject(ElementRef);
   
   displayedFragments = signal<DisplayFragment[]>([]);
   activeFragmentId = signal<number | null>(null);
@@ -45,6 +46,24 @@ export class MemoryViewerComponent {
     });
   }
 
+  private scrollToBottom(): void {
+    // We use requestAnimationFrame to ensure the scroll happens after the DOM has been painted,
+    // which is necessary after a signal update.
+    requestAnimationFrame(() => {
+      try {
+        const scrollElement: HTMLElement | null = this.elementRef.nativeElement.querySelector('.scroll-area');
+        if (scrollElement) {
+          scrollElement.scrollTo({
+            top: scrollElement.scrollHeight,
+            behavior: 'smooth'
+          });
+        }
+      } catch (err) {
+        console.error('Failed to auto-scroll:', err);
+      }
+    });
+  }
+
   private delay(ms: number): Promise<void> {
     return new Promise(resolve => setTimeout(resolve, ms));
   }
@@ -52,6 +71,7 @@ export class MemoryViewerComponent {
   private async typeIntoSignal(textSignal: WritableSignal<string>, fullText: string, speed: number) {
     for (const char of fullText) {
       textSignal.update(val => val + char);
+      this.scrollToBottom();
       
       let delayMs = speed;
       // Add random jitter to typing speed to make it feel more human.
@@ -86,6 +106,7 @@ export class MemoryViewerComponent {
       
       for (let j = currentText.length; j > 0; j--) {
         textSignal.set(currentText.substring(0, j - 1));
+        this.scrollToBottom();
         await this.delay(5); // Rapid backspace speed
       }
     }
@@ -137,6 +158,7 @@ export class MemoryViewerComponent {
             await this.delay(500 + Math.random() * 300); // Pause before correcting.
             for (let i = 0; i < mistake.length; i++) {
               newFragment.text.update(val => val.slice(0, -1));
+              this.scrollToBottom();
               await this.delay(40 + Math.random() * 30); // Fast, variable backspace speed.
             }
             await this.delay(300 + Math.random() * 200); // Pause after deleting.
@@ -149,8 +171,10 @@ export class MemoryViewerComponent {
             await this.typeIntoSignal(newFragment.text, incorrectPart, fragment.typingSpeed);
             await this.delay(400);
             newFragment.text.update(val => val.slice(0, -1));
+            this.scrollToBottom();
             await this.delay(200);
             newFragment.text.update(val => val.slice(0, -1));
+            this.scrollToBottom();
             await this.delay(300);
             await this.typeIntoSignal(newFragment.text, correctRest, fragment.typingSpeed);
           } else {
