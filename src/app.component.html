@@ -1,0 +1,45 @@
+<main class="w-screen h-screen flex items-center justify-center p-4 selection:bg-stone-500 selection:text-stone-100 transition-colors duration-1000"
+      [class.bg-black]="appState() === 'fade_to_black' || appState() === 'credits' || appState() === 'end'"
+      [class.bg-stone-900]="appState() !== 'fade_to_black' && appState() !== 'credits' && appState() !== 'end'">
+
+  <!-- Exam View (Initial and Time's Up) -->
+  <div class="fixed inset-0 transition-all duration-[2000ms]"
+       [class.opacity-100]="appState() === 'exam' || appState() === 'times_up'"
+       [class.opacity-0]="appState() === 'memory' || appState() === 'fade_to_black' || appState() === 'credits' || appState() === 'end'"
+       [class.blur-md]="appState() === 'dissociating'">
+    <app-exam [questions]="examQuestions" [timeUp]="appState() === 'times_up'" />
+  </div>
+
+  <!-- Memory Viewer -->
+  <div class="fixed inset-0 transition-opacity duration-[2000ms]"
+       [class.opacity-100]="appState() === 'memory'"
+       [class.opacity-0]="appState() !== 'memory'">
+    @if (appState() === 'memory') {
+      <app-memory-viewer (finished)="onMemoriesFinished()" />
+    }
+  </div>
+
+  <!-- Credits -->
+  <div class="fixed inset-0 flex items-center justify-center transition-opacity"
+       [class.duration-[3000ms]]="appState() === 'credits'"
+       [class.duration-300]="appState() === 'end'"
+       [class.opacity-100]="appState() === 'credits'"
+       [class.opacity-0]="appState() !== 'credits'">
+    @if (appState() === 'credits' || appState() === 'end') {
+      <div class="text-center text-stone-300">
+        <h1 class="text-6xl font-bold font-serif tracking-tighter">
+          <span>over</span><span class="text-stone-600 mx-1">|</span><span>sight</span>
+        </h1>
+        <p class="mt-6 text-xl font-serif text-stone-400">by hayden park</p>
+      </div>
+    }
+  </div>
+
+  <!-- Spacebar Prompt -->
+  @if (appState() === 'exam') {
+    <div class="fixed bottom-4 right-4 text-stone-500 text-sm lowercase tracking-wider font-mono">
+      press [space] to continue
+    </div>
+  }
+
+</main>

@@ -1,0 +1,60 @@
+<div class="max-w-3xl mx-auto p-12 bg-white text-black rounded-sm shadow-xl font-serif relative">
+  <header class="flex justify-between items-center border-b-2 border-black pb-4 mb-8">
+    <div>
+      <h1 class="text-3xl font-bold tracking-wider">Doctoral Candidacy Examination</h1>
+      <p class="text-lg text-gray-700">Department of Comparative Literature & Critical Theory</p>
+    </div>
+    <div class="text-center">
+      <div class="w-16 h-16 bg-gray-200 border border-gray-400 flex items-center justify-center">
+        <span class="text-xs text-gray-500">[SEAL]</span>
+      </div>
+      <p class="text-xs mt-1 text-gray-600">Est. 1889</p>
+    </div>
+  </header>
+
+  <div class="grid grid-cols-2 gap-8 mb-8 font-sans text-sm">
+    <div>
+      <label for="candidate-id" class="block text-xs uppercase tracking-widest text-gray-600">Candidate ID</label>
+      <div id="candidate-id" class="mt-1 p-2 border-b border-gray-800 font-mono text-lg">PHD-7B411-C</div>
+    </div>
+    <div>
+      <label for="seat-number" class="block text-xs uppercase tracking-widest text-gray-600">Seat Number</label>
+      <div id="seat-number" class="mt-1 p-2 border-b border-gray-800 font-mono text-lg">21A</div>
+    </div>
+  </div>
+
+  <div class="mb-8 p-4 bg-gray-50 border border-gray-200 text-sm text-gray-700">
+    <h2 class="font-bold mb-2">Instructions</h2>
+    <p>Select the single best answer for each question. There is no penalty for incorrect answers. You have three hours to complete this section. Do not turn the page until instructed. Your proctor will not answer questions regarding the content of the examination.</p>
+  </div>
+  
+  <form class="space-y-10">
+    @for (question of questions(); track question.id) {
+      <fieldset>
+        <legend class="text-lg font-semibold mb-4 leading-relaxed">
+          {{ question.id }}. {{ question.question }}
+        </legend>
+        <div class="space-y-3">
+          @for (option of question.options; track $index) {
+            <label class="flex items-start p-4 border border-gray-200 rounded-sm hover:bg-gray-100 transition-colors cursor-pointer group">
+              <input 
+                type="radio" 
+                [name]="'question-' + question.id" 
+                class="mt-1 h-4 w-4 text-black border-gray-400 focus:ring-black focus:ring-offset-2">
+              <span class="ml-4 text-gray-800 group-hover:text-black">{{ option }}</span>
+            </label>
+          }
+        </div>
+      </fieldset>
+    }
+  </form>
+
+  @if (timeUp()) {
+    <div class="absolute inset-0 bg-white/80 backdrop-blur-sm flex items-center justify-center rounded-sm">
+      <div class="text-center transform -rotate-6">
+        <h2 class="text-7xl font-black text-red-700 tracking-widest font-sans border-4 border-red-700 p-6">TIME'S UP</h2>
+        <p class="mt-4 text-gray-600 text-lg">Please put your pencils down.</p>
+      </div>
+    </div>
+  }
+</div>
