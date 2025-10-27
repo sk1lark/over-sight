@@ -1,9 +1,9 @@
-<div class="w-full h-full flex justify-center overflow-y-auto py-16">
+<div class="w-full h-full flex justify-center overflow-y-auto py-16 scroll-area">
   <div class="max-w-3xl w-full p-8 space-y-6">
     @for (fragment of displayedFragments(); track fragment.id) {
       @if (fragment.perspective === 'first-person') {
         <div class="text-center">
-          <p [class]="fragment.className + ' transition-opacity duration-1000 animate-fadeIn whitespace-pre-wrap inline-block'">
+          <p [class]="fragment.className + ' transition-opacity duration-1000 animate-fadeIn whitespace-pre-wrap inline-block break-words'">
             <span>{{ fragment.text() }}</span>
             @if (fragment.id === activeFragmentId()) {
               <span class="inline-block w-2 h-[1.1em] animate-cursor-pulse ml-1 align-text-bottom bg-stone-400"></span>
@@ -11,7 +11,7 @@
           </p>
         </div>
       } @else {
-        <p [class]="fragment.className + ' w-full font-screenplay transition-opacity duration-1000 animate-fadeIn whitespace-pre-wrap text-left'">
+        <p [class]="fragment.className + ' w-full font-screenplay transition-opacity duration-1000 animate-fadeIn whitespace-pre-wrap text-left break-words'">
           <span>{{ fragment.text() }}</span>
           @if (fragment.id === activeFragmentId()) {
             <span class="inline-block w-2 h-[1.1em] animate-cursor-pulse ml-1 align-text-bottom bg-stone-400"></span>
