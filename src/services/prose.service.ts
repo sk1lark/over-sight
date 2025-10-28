@@ -450,7 +450,7 @@ export class ProseService {
       // Scene 28: The Weather
       { id: 1045, text: `EXT. HOUSE - NIGHT\n\nA storm is raging. WIND howls. RAIN lashes against the windows.`, perspective: 'third-person', initialDelay: 1000, typingSpeed: 70, className: 'text-lg text-stone-400' },
       { id: 220, text: 'I used to love storms. It felt like the world was alive.', perspective: 'first-person', initialDelay: 4000, typingSpeed: 80, className: 'text-2xl' },
-      { id: 1046, text: `INT. LIVING ROOM - CONTINUOUS\n\nThe power flickers. The lights go out.\n\nA sudden, deep darkness.`, perspective: 'third-person', initialDelay: 3000, typingSpeed: 70, className: 'text-lg text-stone-400' },
+      { id: 1046, text: `INT. LIVING ROOM - CONTINUOUS\n\nThe power flickers. The lights go out.\n\nDarkness.`, perspective: 'third-person', initialDelay: 3000, typingSpeed: 70, className: 'text-lg text-stone-400' },
       { id: 221, text: 'The darkness outside is nothing compared to the darkness inside.', perspective: 'first-person', initialDelay: 3000, typingSpeed: 85, className: 'text-2xl' },
       { id: 1047, text: `A flash of LIGHTNING illuminates the room for a split second.\n\nThe Man is standing by the window, looking out. His face is a mask.`, perspective: 'third-person', initialDelay: 4000, typingSpeed: 70, className: 'text-lg text-stone-400' },
       { id: 222, text: 'In those flashes, you see things clearly. For just a moment.', perspective: 'first-person', initialDelay: 3000, typingSpeed: 80, className: 'text-xl' },
