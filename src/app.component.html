@@ -15,7 +15,7 @@
        [class.opacity-100]="appState() === 'memory'"
        [class.opacity-0]="appState() !== 'memory'">
     @if (appState() === 'memory') {
-      <app-memory-viewer (finished)="onMemoriesFinished()" />
+      <app-memory-viewer (finished)="onMemoriesFinished()" [isSpeedingUp]="isSpeedingUp()" />
     }
   </div>
 
@@ -39,6 +39,13 @@
   @if (appState() === 'exam') {
     <div class="fixed bottom-4 right-4 text-stone-500 text-sm lowercase tracking-wider font-mono">
       press [space] to continue
+    </div>
+  }
+
+  <!-- Fast-forward indicator -->
+  @if (appState() === 'memory' && isSpeedingUp()) {
+    <div class="fixed bottom-4 right-4 text-stone-500 text-sm lowercase tracking-wider font-mono animate-pulse">
+      fast-forward...
     </div>
   }
 
