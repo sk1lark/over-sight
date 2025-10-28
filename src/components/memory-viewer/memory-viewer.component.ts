@@ -1,4 +1,4 @@
-import { Component, ChangeDetectionStrategy, afterNextRender, signal, WritableSignal, inject, output, ElementRef } from '@angular/core';
+import { Component, ChangeDetectionStrategy, afterNextRender, signal, WritableSignal, inject, output, ElementRef, input } from '@angular/core';
 import { ProseService } from '../../services/prose.service';
 import { ProseFragment } from '../../models/prose.model';
 
@@ -39,6 +39,7 @@ export class MemoryViewerComponent {
   displayedFragments = signal<DisplayFragment[]>([]);
   activeFragmentId = signal<number | null>(null);
   finished = output<void>();
+  isSpeedingUp = input<boolean>(false);
 
   constructor() {
     afterNextRender(() => {
@@ -65,7 +66,8 @@ export class MemoryViewerComponent {
   }
 
   private delay(ms: number): Promise<void> {
-    return new Promise(resolve => setTimeout(resolve, ms));
+    const effectiveDelay = this.isSpeedingUp() ? 1 : ms;
+    return new Promise(resolve => setTimeout(resolve, effectiveDelay));
   }
   
   private async typeIntoSignal(textSignal: WritableSignal<string>, fullText: string, speed: number) {
