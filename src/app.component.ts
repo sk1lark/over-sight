@@ -12,7 +12,8 @@ type AppState = 'exam' | 'dissociating' | 'memory' | 'times_up' | 'fade_to_black
   imports: [ExamComponent, MemoryViewerComponent],
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    '(document:keydown.space)': 'onSpacebarPress($event)'
+    '(document:keydown.space)': 'onSpacebarPress($event)',
+    '(document:keyup.space)': 'onSpacebarRelease($event)',
   }
 })
 export class AppComponent {
@@ -20,11 +21,22 @@ export class AppComponent {
 
   examQuestions = this.proseService.getExamQuestions();
   appState = signal<AppState>('exam');
+  isSpeedingUp = signal(false);
 
   onSpacebarPress(event: KeyboardEvent) {
     if (this.appState() === 'exam') {
       event.preventDefault();
       this.onStartDissociation();
+    } else if (this.appState() === 'memory') {
+      event.preventDefault();
+      this.isSpeedingUp.set(true);
+    }
+  }
+
+  onSpacebarRelease(event: KeyboardEvent) {
+    if (this.appState() === 'memory') {
+      event.preventDefault();
+      this.isSpeedingUp.set(false);
     }
   }
 
